@@ -34,4 +34,8 @@ module TreeHelperMethods
   def tree_click(node)
     @driver.find_element(:css => node.a_selector).click
   end
+
+  def check_tree_node_for_title(title)
+    @driver.find_element_with_text('//div[@id="tree-container"]//tr', /#{title}/)
+  end
 end
