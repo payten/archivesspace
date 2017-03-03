@@ -106,7 +106,7 @@ describe "Tree UI" do
     @driver.click_and_wait_until_gone(:css => "form#archival_object_form button[type='submit']")
 
     # open the node (maybe this should happen by default?)
-    @driver.find_element(:id => tree_node(@a2).tree_id
+    @driver.find_element(:id => tree_node(@a2).tree_id)
       .find_element(:css => ".expandme").click
 
     # we expect the move to have been rebuffed

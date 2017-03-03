@@ -10,7 +10,7 @@ module TreeHelperMethods
     end
 
     def li_selector
-      "##{tree_id}.largetree-node"
+      "##{tree_id}"
     end
 
     def a_selector
@@ -37,5 +37,13 @@ module TreeHelperMethods
 
   def check_tree_node_for_title(title)
     @driver.find_element_with_text('//div[@id="tree-container"]//tr', /#{title}/)
+  end
+
+  def tree_current
+    @driver.find_element(:css => "#tree-container .current")
+  end
+
+  def tree_nodes_at_level(level)
+    @driver.blocking_find_elements(:css => "#tree-container .largetree-node.indent-level-#{level}")
   end
 end
