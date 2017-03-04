@@ -29,7 +29,7 @@ describe "Tree UI" do
   end
 
 
-  it "can add a sibling" do
+  xit "can add a sibling" do
 
     @driver.find_elements(:css => "li.jstree-node").length.should eq(4)
 
@@ -50,7 +50,7 @@ describe "Tree UI" do
   end
 
 
-  it "can support dnd: into a sibling archival object" do
+  xit "can support dnd: into a sibling archival object" do
     @driver.navigate.refresh
     # first resize the tree pane (do it incrementally so it doesn't flip out...)
     pane_resize_handle = @driver.find_element(:css => ".ui-resizable-handle.ui-resizable-s")
