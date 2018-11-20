@@ -882,3 +882,15 @@ span.head {
 .skipnav a:focus {
   position: absolute;
 }
+
+// YALE THINGS
+.infinite-record-context {
+  border-bottom: 1px solid #CCC;
+  height: 40px;
+  line-height: 40px;
+  overflow: hidden;
+}
+
+.infinite-tree-view .expandme {
+  visibility: hidden;
+}
