@@ -290,12 +290,18 @@
         $(waypointElts).each(function (_, waypoint) {
             var waypointNumber = $(waypoint).data('waypoint-number');
             var waypointSize = $(waypoint).data('waypoint-size');
+            var collectionSize = $(waypoint).data('collection-size');
             var uris = $(waypoint).data('uris').split(';');
+
+            self.elt.attr('aria-busy', 'true');
 
             $.ajax(self.url_for('waypoints'), {
                 method: 'GET',
                 data: {
                     urls: uris,
+                    number: waypointNumber,
+                    size: waypointSize,
+                    collection_size: collectionSize,
                 }
             }).done(function (records) {
                 var allRecords = self.elt.find('.infinite-record-record');
@@ -334,6 +340,8 @@
                 if (waypointElts.length <= populated_count) {
                     done_callback();
                 }
+
+                self.elt.removeAttr('aria-busy');
             });
         });
     };
