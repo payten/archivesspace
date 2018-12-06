@@ -890,8 +890,14 @@ span.head {
   line-height: 40px;
 }
 
-.feed-container .infinite-record-context .dropdown {
+.feed-container .infinite-record-context .dropdown,
+.feed-container .infinite-record-context .dropdown a#scrollContext,
+.feed-container .infinite-record-context .dropdown .dropdown-menu {
   width: 100%;
+}
+
+.feed-container .infinite-record-context .dropdown a#scrollContext {
+  display: block;
 }
 
 .feed-container .infinite-tree-view .expandme {
