@@ -383,9 +383,9 @@
     InfiniteScroll.prototype.updateContextSummary = function() {
         var context = this.getCurrentContext();
         if (context) {
-            this.contextSummaryElt.html(context.link);
+            // this.contextSummaryElt.html(context.link);
         } else {
-            this.contextSummaryElt.empty();
+            // this.contextSummaryElt.empty();
         }
     };
 

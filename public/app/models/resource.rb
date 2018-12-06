@@ -114,6 +114,10 @@ class Resource < Record
     json['instances']
   end
 
+  def top_level_records
+    archives_space_client.get_all_top_level_archival_objects(uri)
+  end
+
   private
 
   def parse_digital_instance

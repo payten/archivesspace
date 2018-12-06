@@ -21,8 +21,22 @@
 <%= javascript_include_tag 'tree_renderer' %>
 
 <div class="row feed-container" id="tabs">
-  <div class="col-sm-9">
-    <div class="infinite-record-context"></div>
+  <section class="col-sm-9">
+    <nav class="infinite-record-context">
+      <div class="dropdown">
+        <a id="scrollContext" data-target="#" href="javascript:void(0)" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" aria-label="Navigate to record in feed">
+          <%= @result.display_string %>
+          <span class="caret"></span>
+        </a>
+
+        <ul class="dropdown-menu" aria-labelledby="scrollContext">
+          <li><a href="#tree:resource_<%= @result.uri.match(/[0-9]+$/).to_s %>"><%= @result.display_string %></a></li>
+          <% @result.top_level_records.each do |record| %>
+            <li><a href="#tree:archival_object_<%= record['id']%>"><%= record['title'] %></a> </li>
+          <% end %>
+        </ul>
+      </div>
+    </nav>
     <div class="infinite-record-wrapper">
       <div id="collection-feed" class="infinite-record-container" role="feed" aria-label="<%= I18n.t('collection_feed') %>">
         <div class="root">
@@ -33,10 +47,9 @@
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div id="sidebar" class="sidebar sidebar-container col-sm-3 resizable-sidebar infinite-tree-sidebar">
-    <div class="infinite-tree-view largetree-container" id='tree-container'></div>
+  <div class="col-sm-3">
   </div>
 </div>
 
@@ -55,19 +68,19 @@
  /* NOTE: This just here for debugging... */
  window.scroller = scroll;
 
- var tree = new LargeTree(new TreeDataSource('<%= url_for(:action => :show) %>/tree'),
-                          $('.infinite-tree-view'),
-                          '<%= @root_uri %>',
-                          true,
-                          new SimpleRenderer(),
-                          function() {
-                              syncer.treeIsReady(tree);
-                          },
-                          function(current_node, tree) {
-                            // tree.expandNode(current_node);
-                          });
+<!-- var tree = new LargeTree(new TreeDataSource('<%= url_for(:action => :show) %>/tree'),-->
+<!--                          $('.infinite-tree-view'),-->
+<!--                          '<%= @root_uri %>',-->
+<!--                          true,-->
+<!--                          new SimpleRenderer(),-->
+<!--                          function() {-->
+<!--                              syncer.treeIsReady(tree);-->
+<!--                          },-->
+<!--                          function(current_node, tree) {-->
+<!--                            // tree.expandNode(current_node);-->
+<!--                          });-->
 
-window.tree = tree;
+<!-- window.tree = tree; -->
 </script>
 
 <script>
@@ -81,6 +94,10 @@ window.tree = tree;
 
     return true;
   });
+</script>
+
+<script>
+    $('#scrollContext').dropdown()
 </script>
 
 <%= render partial: 'shared/modal_actions' %>

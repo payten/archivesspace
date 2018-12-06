@@ -129,6 +129,10 @@ class ArchivesSpaceClient
     SolrResults.new(results, search_opts)
   end
 
+  def get_all_top_level_archival_objects(resource_uri)
+    search_all_results("resource:\"#{resource_uri}\"")
+  end
+
   private
 
 

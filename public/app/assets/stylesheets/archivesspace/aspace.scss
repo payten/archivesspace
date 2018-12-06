@@ -888,9 +888,14 @@ span.head {
   border-bottom: 1px solid #CCC;
   height: 40px;
   line-height: 40px;
-  overflow: hidden;
+}
+
+.feed-container .infinite-record-context .dropdown {
+  width: 100%;
 }
 
 .feed-container .infinite-tree-view .expandme {
   visibility: hidden;
 }
+
+.
