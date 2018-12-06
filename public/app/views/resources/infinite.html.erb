@@ -32,7 +32,7 @@
         <ul class="dropdown-menu" aria-labelledby="scrollContext">
           <li><a href="#tree:resource_<%= @result.uri.match(/[0-9]+$/).to_s %>"><%= @result.display_string %></a></li>
           <% @result.top_level_records.each do |record| %>
-            <li><a href="#tree:archival_object_<%= record['id']%>"><%= record['title'] %></a> </li>
+            <li><a href="#tree:archival_object_<%= record['id']%>"><%= record['title'] %></a></li>
           <% end %>
         </ul>
       </div>
