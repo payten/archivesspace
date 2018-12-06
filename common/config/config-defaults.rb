@@ -595,3 +595,15 @@ AppConfig[:pui_request_use_repo_email] = false
 
 #The number of characters to truncate before showing the 'Read More' link on notes
 AppConfig[:pui_readmore_max_characters] = 450
+
+# Display order of resource and archival object notes in the PUI scroll view
+AppConfig[:pui_scroll_view_notes_order] = ['scopecontent',
+                                           'physloc',
+                                           'langmaterial',
+                                           'physdesc',
+                                           'accessrestrict',
+                                           'userestrict',
+                                           'acqinfo',
+                                           'arrangement',
+                                           'originalsloc',
+                                           'relatedmaterial']
