@@ -885,9 +885,6 @@ span.head {
 
 // YALE THINGS
 .feed-container .infinite-record-context {
-  border-bottom: 1px solid #CCC;
-  height: 40px;
-  line-height: 40px;
 }
 
 .feed-container .infinite-record-context .dropdown,
@@ -897,7 +894,15 @@ span.head {
 }
 
 .feed-container .infinite-record-context .dropdown a#scrollContext {
-  display: block;
+  position: relative;
+  text-align: left;
+
+  .caret {
+    right: 10px;
+    position: absolute;
+    top: 50%;
+    margin-top: -2px;
+  }
 }
 
 .feed-container .infinite-tree-view .expandme {

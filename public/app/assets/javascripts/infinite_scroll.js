@@ -10,6 +10,7 @@
         this.wrapper = elt;
         this.elt = elt.find('.infinite-record-container');
         this.contextSummaryElt = elt.siblings('.infinite-record-context');
+        this.container = elt.closest('.feed-container');
         this.recordCount = recordCount;
 
         this.scrollPosition = 0;
@@ -24,6 +25,7 @@
                 loaded_callback();
             }
 
+            self.handleHashOnLoad();
             self.updateContextSummary();
         }
 
@@ -115,6 +117,11 @@
             }
 
             self.scrollBy(scrollAmount);
+        });
+
+        // FIXME
+        self.container.on('click', '.infinite-record-context .dropdown-menu a', function() {
+            self.scrollToRecordForURI($(this).data('uri'));
         });
     };
 
@@ -384,10 +391,43 @@
         var context = this.getCurrentContext();
         if (context) {
             // this.contextSummaryElt.html(context.link);
+            $('#scrollContext .current-record-title').html(context.link.html());
         } else {
             // this.contextSummaryElt.empty();
+            $('#scrollContext .current-record-title').html($('#scrollContext').parent().find('.dropdown-menu a:first').html());
         }
     };
+
+    InfiniteScroll.prototype.scrollToRecordForURI = function(uri) {
+        var self = this;
+
+        var $waypoint = self.wrapper.find('[data-uris*="'+uri+';"], [data-uris$="'+uri+'"]');
+        var uris = $waypoint.data('uris').split(';');
+        var index = $.inArray(uri, uris);
+        var waypoint_number = $waypoint.data('waypointNumber');
+        var waypoint_size = $waypoint.data('waypointSize');
+        var recordOffset = waypoint_number * waypoint_size + index;
+
+        if ($waypoint.is('.populated')) {
+            self.scrollToRecord(recordOffset);
+        } else {
+            self.populateWaypoints($waypoint, false, function() {
+                self.scrollToRecord(recordOffset);
+            });
+        }
+
+        history.replaceState(null, null, document.location.pathname + '#scroll::' + uri);
+    };
+    InfiniteScroll.prototype.handleHashOnLoad = function() {
+        if (!location.hash) {
+            return;
+        }
+
+        var uri = location.hash.replace(/^#(scroll::)?/, "");
+
+        this.scrollToRecordForURI(uri);
+    };
+
 
     exports.InfiniteScroll = InfiniteScroll;
 
