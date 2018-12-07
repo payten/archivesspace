@@ -17,13 +17,19 @@
   <nav class="context" style="display: none" aria-hidden="true">
     <ul>
       <% if @result.is_a?(ArchivalObject) %>
+        <% if @result.resolved_resource %>
+          <li><%= link_to @result.resolved_resource['title'], "#scroll::#{@result.resolved_resource['uri']}", :"data-uri" => @result.resolved_resource['uri'] %></li>
+          <% end %>
         <% @result.ancestors.each do |ancestor| %>
-          <% parsed_uri = JSONModel.parse_reference(ancestor['uri']) %>
-          <li><%= link_to ancestor['title'].html_safe, "#tree::#{parsed_uri[:type]}_#{parsed_uri[:id]}", :"data-uri" => ancestor['uri'] %></li>
+          <% next unless ancestor['level'] == 'series' %>
+          <li><%= link_to ancestor['title'].html_safe, "#scroll::#{ancestor['uri']}", :"data-uri" => ancestor['uri'] %></li>
         <% end %>
-      <% end %>
-      <% parsed_uri = JSONModel.parse_reference(@result['uri']) %>
-      <li><%= link_to @result['title'].html_safe, "#tree::#{parsed_uri[:type]}_#{parsed_uri[:id]}", :"data-uri" => @result['uri'] %></li>
+        <% if @result.level == 'series' %>
+          <li><%= link_to @result['title'].html_safe, "#scroll::#{@result['uri']}", :"data-uri" => @result['uri'] %></li>
+        <% end %>
+      <% else %>
+        <li><%= link_to @result['title'].html_safe, "#scroll::#{@result['uri']}", :"data-uri" => @result['uri'] %></li>
+    <% end %>
     </ul>
   </nav>
 

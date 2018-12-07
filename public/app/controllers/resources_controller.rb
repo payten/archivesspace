@@ -196,7 +196,7 @@ class ResourcesController <  ApplicationController
 
   def waypoints
     search_opts = {
-      'resolve[]' => ['top_container_uri_u_sstr:id', 'ancestors:id']
+      'resolve[]' => ['top_container_uri_u_sstr:id', 'ancestors:id', 'resource:id']
     }
 
     urls = params[:urls]

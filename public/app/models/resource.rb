@@ -114,8 +114,8 @@ class Resource < Record
     json['instances']
   end
 
-  def top_level_records
-    archives_space_client.get_all_top_level_archival_objects(uri)
+  def all_series
+    archives_space_client.get_all_series(uri)
   end
 
   private

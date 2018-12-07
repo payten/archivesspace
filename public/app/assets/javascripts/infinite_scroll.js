@@ -370,14 +370,8 @@
         var current = this.getClosestElement();
         var ancestors = current.find('.context ul li');
 
-        if (ancestors.length > 1) {
-            var $link = $(ancestors.get(1).innerHTML);
-            return {
-                uri: $link.data('uri'),
-                link: $link
-            };
-        } else if (ancestors.length == 1) {
-            var $link = $(ancestors.get(0).innerHTML);
+        if (ancestors.length > 0) {
+            var $link = $(ancestors[ancestors.length-1].innerHTML);
             return {
                 uri: $link.data('uri'),
                 link: $link
