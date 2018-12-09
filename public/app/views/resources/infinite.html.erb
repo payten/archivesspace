@@ -29,7 +29,7 @@
         <ul class="dropdown-menu" aria-labelledby="scrollContext">
           <li><%= link_to @result.display_string, "#scroll::#{@result.uri}", 'data-uri': @result.uri %></li>
           <% @result.all_series.each do |record| %>
-            <li><%= link_to record['title'], "#scroll::#{record['uri']}", 'data-uri': record['uri'] %></li>
+            <li><%= link_to "&mdash; #{record['title']}".html_safe, "#scroll::#{record['uri']}", 'data-uri': record['uri'] %></li>
           <% end %>
         </ul>
       </div>

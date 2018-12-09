@@ -130,7 +130,7 @@ class ArchivesSpaceClient
   end
 
   def get_all_series(resource_uri)
-    search_all_results("resource:\"#{resource_uri}\" AND level:series")
+    search_all_results("resource:\"#{resource_uri}\" AND level:series AND types:pui_archival_object")
   end
 
   private
