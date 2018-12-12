@@ -31,6 +31,7 @@
 
         this.initScrollbar();
         this.initEventHandlers();
+        this.initKeyboardNavigation();
         this.considerPopulatingWaypoints(false, null, onLoaded);
 
         this.registerScrollCallback($.proxy(this.updateContextSummary, this));
@@ -180,7 +181,7 @@
         self.scrollbarElt.scrollTop(pxOffset);
     };
 
-    InfiniteScroll.prototype.scrollToRecord = function (recordNumber) {
+    InfiniteScroll.prototype.scrollToRecord = function (recordNumber, oneTimeCallback) {
         var self = this;
 
         var containerTop = self.wrapper.offset().top;
@@ -197,6 +198,9 @@
                 $.each(self.scrollCallbacks, function(_, callback) {
                     callback();
                 });
+                if (oneTimeCallback) {
+                    oneTimeCallback();
+                }
             });
         };
 
@@ -406,12 +410,15 @@
             self.scrollToRecord(recordOffset);
         } else {
             self.populateWaypoints($waypoint, false, function() {
-                self.scrollToRecord(recordOffset);
+                self.scrollToRecord(recordOffset, function() {
+                    $('#record-number-' + recordOffset + ' > .infinite-item').focus();
+                });
             });
         }
 
         history.replaceState(null, null, document.location.pathname + '#scroll::' + uri);
     };
+
     InfiniteScroll.prototype.handleHashOnLoad = function() {
         if (!location.hash) {
             return;
@@ -422,6 +429,43 @@
         this.scrollToRecordForURI(uri);
     };
 
+    InfiniteScroll.prototype.initKeyboardNavigation = function() {
+        var self = this;
+
+        self.elt.on('keydown', '.infinite-record-record', function(event) {
+            var $item = $(this).closest('.infinite-record-record');
+
+            var focusRecordNumber = $item.find(' > .infinite-item').data('recordnumber');
+            var firstRecordNumber = 0;
+            var lastRecordNumber = $item.find(' > .infinite-item').data('collectionsize') - 1;
+
+            if (event.keyCode == 34) { // page down
+                // focus next feed article
+                focusRecordNumber = Math.min(focusRecordNumber + 1, lastRecordNumber);
+            } else if (event.keyCode == 33) { // page up
+                // focus previous feed article
+                if ($item.prev()) {
+                    focusRecordNumber = Math.max(focusRecordNumber - 1, firstRecordNumber);
+                }
+            } else if (event.ctrlKey && event.keyCode == 35) { // control + end
+                // jump to bottom
+                focusRecordNumber = lastRecordNumber;
+            } else if (event.ctrlKey && event.keyCode == 36) { // control + home
+                // jump to top
+                focusRecordNumber = firstRecordNumber;
+            } else {
+                return true;
+            }
+
+            event.preventDefault();
+
+            self.scrollToRecord(focusRecordNumber, function() {
+                $('#record-number-' + focusRecordNumber + ' > .infinite-item').focus();
+            });
+
+            return false;
+        });
+    };
 
     exports.InfiniteScroll = InfiniteScroll;
 

@@ -1,15 +1,20 @@
 <%
   indent_level = @result.raw.fetch('ancestors', []).length
 
-  labelledby = "infinite-item-dispay-string-#{posinset}"
-  describedby = "infinite-item-notes-#{posinset}"
+  posinset = record_number + 1
+  setsize = collection_size
+
+  labelledby = "infinite-item-dispay-string-#{record_number}"
+  describedby = "infinite-item-notes-#{record_number}"
 %>
 <div class="infinite-item infinite-item-indent-<%= indent_level %>"
      role="article"
      aria-labelledby="<%= labelledby %>"
      aria-describedby="<%= labelledby %> <%= describedby %>"
      aria-posinset="<%= posinset %>"
+     data-recordnumber="<%= record_number %>"
      aria-setsize="<%= setsize %>"
+     data-collectionsize="<%= collection_size %>"
      tabindex="0"
      data-uri="<%= @result.uri %>"
 >

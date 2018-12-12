@@ -208,12 +208,12 @@ class ResourcesController <  ApplicationController
 
     render :json => Hash[results.records.map {|record|
                           @result = record
-                          posinset = (waypoint_number * waypoint_size) + urls.index(@result.uri) + 1
+                          record_number = (waypoint_number * waypoint_size) + urls.index(@result.uri)
                           [record.uri,
                           render_to_string(:partial => 'infinite_item',
                                            :locals => {
-                                             :posinset => posinset,
-                                             :setsize => collection_size,
+                                             :record_number =>  record_number,
+                                             :collection_size =>  collection_size
                                            })]}]
   end
 
