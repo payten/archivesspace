@@ -5,6 +5,8 @@
     var SCROLL_DRAG_DELAY_MS = 500;
     var LOAD_THRESHOLD_PX = 5000;
 
+    var HASH_PREFIX = 'scroll::';
+
     function InfiniteScroll(base_url, elt, recordCount, loaded_callback) {
         this.base_url = base_url;
         this.wrapper = elt;
@@ -120,9 +122,12 @@
             self.scrollBy(scrollAmount);
         });
 
-        // FIXME
         self.container.on('click', '.infinite-record-context .dropdown-menu a', function() {
             self.scrollToRecordForURI($(this).data('uri'));
+        });
+
+        self.container.on('focus', '.infinite-item', function() {
+            self.updateHash($(this).data('uri'));
         });
     };
 
@@ -400,6 +405,12 @@
         var self = this;
 
         var $waypoint = self.wrapper.find('[data-uris*="'+uri+';"], [data-uris$="'+uri+'"]');
+
+        if ($waypoint.length == 0) {
+            // Record not found
+            return;
+        }
+
         var uris = $waypoint.data('uris').split(';');
         var index = $.inArray(uri, uris);
         var waypoint_number = $waypoint.data('waypointNumber');
@@ -407,26 +418,39 @@
         var recordOffset = waypoint_number * waypoint_size + index;
 
         if ($waypoint.is('.populated')) {
-            self.scrollToRecord(recordOffset);
+            self.scrollToRecord(recordOffset, function() {
+                self.focusRecord(recordOffset);
+            });
         } else {
             self.populateWaypoints($waypoint, false, function() {
                 self.scrollToRecord(recordOffset, function() {
-                    $('#record-number-' + recordOffset + ' > .infinite-item').focus();
+                    self.focusRecord(recordOffset);
                 });
             });
         }
 
-        history.replaceState(null, null, document.location.pathname + '#scroll::' + uri);
+        self.updateHash(uri);
+    };
+
+    InfiniteScroll.prototype.updateHash = function(uri) {
+        history.replaceState(null, null, document.location.pathname + '#' + HASH_PREFIX + uri);
     };
 
     InfiniteScroll.prototype.handleHashOnLoad = function() {
+        var self = this;
+
         if (!location.hash) {
             return;
         }
 
-        var uri = location.hash.replace(/^#(scroll::)?/, "");
+        if (location.hash.startsWith('#'+HASH_PREFIX)) {
+            var regex = new RegExp("^#("+HASH_PREFIX+")");
+            var uri = location.hash.replace(regex, "");
 
-        this.scrollToRecordForURI(uri);
+            setTimeout(function() {
+                self.scrollToRecordForURI(uri);
+            });
+        }
     };
 
     InfiniteScroll.prototype.initKeyboardNavigation = function() {
@@ -460,10 +484,16 @@
             event.preventDefault();
 
             self.scrollToRecord(focusRecordNumber, function() {
-                $('#record-number-' + focusRecordNumber + ' > .infinite-item').focus();
+                self.focusRecord(focusRecordNumber);
             });
 
             return false;
+        });
+    };
+
+    InfiniteScroll.prototype.focusRecord = function(recordOffset) {
+        setTimeout(function() {
+            $('#record-number-' + recordOffset + ' > .infinite-item').focus();
         });
     };
 
